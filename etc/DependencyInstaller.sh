@@ -134,9 +134,10 @@ _installUbuntuRuntime() {
         libgomp1 \
         libpython3.8 \
         libtcl \
-        qt5-default \
         qt5-image-formats-plugins \
         tcl-tclreadline
+
+        # qt5-default \
     # need the strip "hack" above to run on docker
     strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so
 }

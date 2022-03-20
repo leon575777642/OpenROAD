@@ -3821,6 +3821,7 @@ void GlobalRouter::updateDirtyRoutes()
     dirty_nets_.clear();
 
     if (fastroute_->has2Doverflow() && !allow_congestion_) {
+      reportCongestion();
       logger_->error(GRT, 232, "Routing congestion too high.");
     }
   }

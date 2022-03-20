@@ -188,8 +188,8 @@ void AntennaRepair::repairAntennas(odb::dbMTerm* diode_mterm)
 
 void AntennaRepair::legalizePlacedCells()
 {
-  opendp_->detailedPlacement(0, 0);
-  opendp_->checkPlacement(false);
+  opendp_->detailedPlacement(1000, 200);
+  opendp_->checkPlacement(true);
 
   // After legalize placement, diodes and violated insts don't need to be FIRM
   setInstsPlacementStatus(odb::dbPlacementStatus::PLACED);
@@ -218,7 +218,7 @@ void AntennaRepair::insertDiode(odb::dbNet* net,
                                 int site_width,
                                 r_tree& fixed_insts)
 {
-  const int max_legalize_itr = 50;
+  const int max_legalize_itr = 0;   // don't try to be smart here.
   bool legally_placed = false;
   bool place_at_left = true;
   int left_offset = 0;
@@ -286,8 +286,11 @@ void AntennaRepair::insertDiode(odb::dbNet* net,
     logger_->warn(
         GRT,
         54,
-        "Placement of diode {} will be legalized by detailed placement.",
-        antenna_inst_name);
+        "Placement of diode {} will be legalized by detailed placement. Attempted loc: {}, {}",
+        antenna_inst_name,
+        inst_loc_x,
+        inst_loc_y
+        );
   }
 
   // allow detailed placement to move diodes with geometry out of the core area,
