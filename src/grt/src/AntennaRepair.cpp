@@ -218,7 +218,7 @@ void AntennaRepair::insertDiode(odb::dbNet* net,
                                 int site_width,
                                 r_tree& fixed_insts)
 {
-  const int max_legalize_itr = 0;   // don't try to be smart here.
+  const int max_legalize_itr = 1;   // try once so the inst is placed near an ideal location
   bool legally_placed = false;
   bool place_at_left = true;
   int left_offset = 0;
@@ -295,12 +295,13 @@ void AntennaRepair::insertDiode(odb::dbNet* net,
 
   // allow detailed placement to move diodes with geometry out of the core area,
   // or near macro pins (can be placed out of row), or illegal placed diodes
-  if (core_area.contains(inst_rect) && !sink_inst->getMaster()->isBlock()
-      && legally_placed) {
-    antenna_inst->setPlacementStatus(odb::dbPlacementStatus::FIRM);
-  } else {
+  // always hand the job to the detailed placer
+  // if (core_area.contains(inst_rect) && !sink_inst->getMaster()->isBlock()
+  //     && legally_placed) {
+  //   antenna_inst->setPlacementStatus(odb::dbPlacementStatus::FIRM);
+  // } else {
     antenna_inst->setPlacementStatus(odb::dbPlacementStatus::PLACED);
-  }
+  // }
 
   antenna_iterm->connect(net);
   diode_insts_.push_back(antenna_inst);
